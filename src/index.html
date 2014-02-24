@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sequence Overlap Graph</title>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js"></script>
+  <script src="//d3js.org/d3.v3.min.js"></script>
+  
+  <!-- inject:js -->
+  <!-- endinject -->
+</head>
+<body ng-app="overlap">
+
+  <div class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a href="#" class="navbar-brand">Overlap Graph</a>
+    </div>
+  </div>
+  </div>
+
+  <div class="container">
+  <div class="row">  
+    <div class="col-xs-12 col-sm-6">
+      <form role="form" ng-controller="NodeEntryController as editor" ng-submit="editor.addNode()">
+        <div class="form-group">
+          <label class="hidden-xs" for="name">Name</label>
+            <input type="text" ng-model="newNode.name" class="form-control" id="name" placeholder="Name" required autofocus>
+        </div>
+        <div class="form-group">
+          <label class="hidden-xs" for="sequence">Sequence</label>
+            <input type="text" ng-model="newNode.sequence" class="form-control" id="sequence" placeholder="Sequence" required>
+        </div>
+        <button class="btn btn-default">Add</button>
+      </form>
+
+      <hr>
+
+      <table class="table table-bordered" ng-controller="NodeListController">
+        <tr>
+          <th>Name</th>
+          <th>Sequence</th>
+        </tr>
+        <tr ng-repeat="node in nodes">
+          <th>{{ node.name }}</th>
+          <td>{{ node.sequence }}</td>
+        </tr>
+      </table>    
+    </div>
+    <div class="col-xs-12 col-sm-6" ng-controller="GraphController as ctrl">
+
+      <form role="form" class="form-inline">
+        <label class="hidden-xs" for="overlapLength">Length</label>
+        <select ng-model="overlapLength" ng-options="length for length in [3, 4, 5]"></select>
+      </form >
+
+      <ul class="graph-table">
+        <li ng-repeat="link in graph.links">
+          {{ link.source.name }} -> {{ link.target.name }}
+        </li>
+      </ul>
+
+    </div>  
+  </div>
+</div>
+
+<!-- 
+  ==================================
+  |    Name:[_________________]    |
+  |    Sequence:[_____________]    |
+  |                                |
+  |                       [Add]    |
+  |  ____________________________  |
+  |  |Name  |  Sequence         |  |
+  |  |READ1 | AAACCCCCGGGTTTTT  |  |
+  |  |READ3 | CACCCCCGCCTAAAC   |  |
+  |  |READ2 | AAACGCCCGGGCCACC  |  |
+  |  ----------------------------  |
+  |                                |
+  |     [Generate Overlap Graph]   |
+  |                                |
+  |  Overlap Graph:                |
+  |  ____________________________  |
+  |  READ3 READ1                   |
+  |  READ2 READ3                   |
+  |                                |
+  ==================================
+
+ -->
+
+</body>
+</html>
